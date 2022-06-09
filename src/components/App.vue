@@ -1,7 +1,7 @@
 <template>
   <div class="container">
     <MainHeader />
-    <h1>Hello</h1>
+    <router-view></router-view>
   </div>
 </template>
 
@@ -55,7 +55,6 @@ button:hover {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  text-align: center;
 }
 
 .container {
