@@ -13,13 +13,16 @@
             <card />
             <card />
         </ul>
+
+        <pagination />
     </main>
 </template>
 
 <script>
 import Card from './Card.vue'
+import Pagination from './Pagination.vue'
 export default {
-    components: { Card },
+    components: { Card, Pagination },
     name: 'main-page',
 }
 </script>
@@ -39,5 +42,6 @@ export default {
     display: grid;
     grid-template-columns: repeat(5, 198px);
     gap: 30px;
+    margin-bottom: 50px;
 }
 </style>
