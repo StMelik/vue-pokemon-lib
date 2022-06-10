@@ -72,7 +72,8 @@ export default {
 .pokemon__info {
     position: relative;
     display: flex;
-    column-gap: 100px;
+    flex-wrap: wrap;
+    gap: 50px 100px;
     padding: 0 30px 50px;
     margin-bottom: 20px;
 }
@@ -83,6 +84,7 @@ export default {
     width: 300px;
     background-color: #555555;
     border-radius: 50%;
+    flex-shrink: 0;
 }
 
 .pokemon__image::after {
@@ -124,13 +126,15 @@ export default {
     font-size: 28px;
 }
 
-.pokemon__description-row:not(:last-child) {
+.pokemon__description-row:not(:last-child):not(.pokemon__description-column .pokemon__description-row) {
     margin-bottom: 15px;
 }
 
 .pokemon__description-column {
     display: flex;
-    column-gap: 30px;
+    flex-wrap: wrap;
+    gap: 15px 30px;
+    margin-bottom: 15px;
 }
 
 .pokemon__description-title {
@@ -138,6 +142,11 @@ export default {
 }
 
 .pokemon__description-text {}
+
+.pokemon__parametr-list {
+    flex-wrap: wrap;
+    gap: 15px;
+}
 
 .pokemon__parametr {
     display: flex;
@@ -202,23 +211,13 @@ export default {
 }
 
 .abilities__list {
-    display: flex;
-    align-items: center;
-    border: 2px solid #e5e5e5;
-    border-radius: 50px;
-    width: max-content;
+    list-style: decimal;
+    padding-left: 50px;
 }
 
 .abilities__item {
-    position: relative;
-    padding: 10px 20px;
-    min-width: 50px;
     font-size: 24px;
-    height: 50px
-}
-
-.abilities__item:not(:last-child) {
-    border-right: 2px solid #e5e5e5;
+    line-height: 1.5;
 }
 
 .items {
@@ -234,6 +233,15 @@ export default {
 .items__item {
     font-size: 24px;
     line-height: 1.5;
+}
+
+@media screen and (max-width: 500px) {
+
+    .pokemon__info,
+    .abilities,
+    .items {
+        padding: 0 0 50px;
+    }
 }
 </style>
 
