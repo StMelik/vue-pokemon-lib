@@ -25,16 +25,24 @@ export default {
 <style>
 .header {
     display: flex;
+    flex-wrap: wrap;
     justify-content: space-between;
     align-items: center;
-    column-gap: 50px;
+    gap: 30px 40px;
     padding: 30px;
     border-bottom: 1px solid #E5E5E5;
 }
 
+@media screen and (max-width: 500px) {
+    .header {
+        padding: 30px 0;
+    }
+}
+
 .nav-header__list {
     display: flex;
-    column-gap: 35px;
+    flex-wrap: wrap;
+    gap: 15px 35px;
 }
 
 .nav-header__link {
@@ -52,7 +60,7 @@ export default {
     background-color: transparent;
     color: inherit;
     font-size: 26px;
-    max-width: 250px;
+    width: 100%;
     height: 40px;
 }
 
@@ -65,5 +73,6 @@ export default {
     background-repeat: no-repeat;
     background-position: 40% center;
     background-size: 25px 25px;
+    flex-shrink: 0;
 }
 </style>

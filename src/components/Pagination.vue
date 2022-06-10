@@ -23,9 +23,10 @@ export default {
 <style>
 .pagination {
     display: flex;
+    flex-wrap: wrap;
     align-items: center;
     justify-content: center;
-    column-gap: 25px;
+    gap: 15px 25px;
     margin-bottom: 50px;
 }
 
@@ -38,6 +39,7 @@ export default {
     background-repeat: no-repeat;
     background-position: center;
     background-size: 30px 30px;
+    flex-shrink: 0;
 }
 
 .pagination__button_next {
@@ -56,5 +58,13 @@ export default {
 
 .pagination__link_active {
     color: #FF7A00;
+}
+
+@media screen and (max-width: 425px) {
+    .pagination__links {
+        width: 100%;
+        justify-content: center;
+        order: -1;
+    }
 }
 </style>

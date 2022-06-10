@@ -52,7 +52,7 @@ export default {
     background-repeat: no-repeat;
     background-size: 160px 160px;
     background-position: center top;
-    height: 175px;
+    height: 200px;
     border-bottom: 2px solid #505050;
 }
 
@@ -63,8 +63,8 @@ export default {
     bottom: 0;
     background-image: linear-gradient(90deg, #505050 0%, rgba(34, 34, 34, 0) 75%);
     ;
-    padding: 2px 5px;
-    font-size: 18px;
+    padding: 4px 10px 2px;
+    font-size: 20px;
 }
 
 .card__content {

@@ -40,7 +40,7 @@ export default {
 
 .main__list {
     display: grid;
-    grid-template-columns: repeat(5, 198px);
+    grid-template-columns: repeat(auto-fit, minmax(198px, 1fr));
     gap: 30px;
     margin-bottom: 50px;
 }
