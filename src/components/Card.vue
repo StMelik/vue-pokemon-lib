@@ -91,8 +91,6 @@ export default {
     font-size: 18px;
 }
 
-.card__description-text {}
-
 .params-card {
     display: flex;
 }

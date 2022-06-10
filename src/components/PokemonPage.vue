@@ -67,8 +67,6 @@ export default {
 </script>
 
 <style>
-.pokemon {}
-
 .pokemon__info {
     position: relative;
     display: flex;
@@ -118,8 +116,6 @@ export default {
     background-image: linear-gradient(90deg, #e5e5e5 0%, #e5e5e500 75%);
 }
 
-.pokemon__description {}
-
 .pokemon__description-row {
     display: flex;
     column-gap: 5px;
@@ -140,8 +136,6 @@ export default {
 .pokemon__description-title {
     font-weight: 700;
 }
-
-.pokemon__description-text {}
 
 .pokemon__parametr-list {
     flex-wrap: wrap;
