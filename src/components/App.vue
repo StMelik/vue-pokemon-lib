@@ -2,6 +2,7 @@
   <div class="container">
     <MainHeader />
     <router-view></router-view>
+
   </div>
 </template>
 
@@ -11,7 +12,12 @@ import MainHeader from './Header.vue'
 export default {
   name: 'App',
   components: {
-    MainHeader
+    MainHeader,
+  },
+
+  mounted() {
+    this.$store.dispatch('loadPokemons')
+    // console.log('mounted App');
   }
 }
 </script>

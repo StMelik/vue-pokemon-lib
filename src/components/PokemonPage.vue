@@ -1,68 +1,129 @@
 <template>
-    <main class="pokemon-page pokemon">
-        <h1 class="pokemon__name">Dragonred</h1>
+    <main class="pokemon-page pokemon" v-if="!getIsLoading">
+        <h1 class="pokemon__name">{{ getName }}</h1>
         <section class="pokemon__info">
-            <div class="pokemon__image"></div>
+            <div class="pokemon__image" :style="{ backgroundImage: `url(${getImage})` }"></div>
             <div class="pokemon__description">
                 <div class="pokemon__description-row">
-                    <p class="pokemon__description-title">Species:</p>
-                    <p class="pokemon__description-text">charmander</p>
-                </div>
-                <div class="pokemon__description-row">
-                    <p class="pokemon__description-title">Gender:</p>
-                    <p class="pokemon__description-text">male, female</p>
-                </div>
-                <div class="pokemon__description-column">
-                    <div class="pokemon__description-row">
-                        <p class="pokemon__description-title">Weight:</p>
-                        <p class="pokemon__description-text">19 kg</p>
-                    </div>
-                    <div class="pokemon__description-row">
-                        <p class="pokemon__description-title">Height:</p>
-                        <p class="pokemon__description-text">1.1 m</p>
-                    </div>
-                </div>
-                <div class="pokemon__description-row">
                     <p class="pokemon__description-title">Type:</p>
-                    <p class="pokemon__description-text">fire</p>
+                    <p class="pokemon__description-text">{{ getType }}</p>
+                </div>
+                <div class="pokemon__description-row">
+                    <p class="pokemon__description-title">Weight:</p>
+                    <p class="pokemon__description-text">{{ getWeight }} kg</p>
+                </div>
+                <div class="pokemon__description-row">
+                    <p class="pokemon__description-title">Height:</p>
+                    <p class="pokemon__description-text">{{ getHeight }} m</p>
                 </div>
                 <div class="pokemon__description-row">
                     <p class="pokemon__description-title">Experience:</p>
-                    <p class="pokemon__description-text">142</p>
+                    <p class="pokemon__description-text">{{ getExperience }}</p>
                 </div>
 
                 <div class="pokemon__description-row pokemon__parametr-list">
-                    <div class="pokemon__parametr pokemon__parametr_hp">125</div>
-                    <div class="pokemon__parametr pokemon__parametr_attack">58</div>
-                    <div class="pokemon__parametr pokemon__parametr_defense">62</div>
-                    <div class="pokemon__parametr pokemon__parametr_special-attack">20</div>
-                    <div class="pokemon__parametr pokemon__parametr_special-defense">10</div>
-                    <div class="pokemon__parametr pokemon__parametr_speed">199</div>
+                    <div class="pokemon__parametr pokemon__parametr_hp">{{ getStats.hp }}</div>
+                    <div class="pokemon__parametr pokemon__parametr_attack">{{ getStats.attack }}</div>
+                    <div class="pokemon__parametr pokemon__parametr_defense">{{ getStats.defense }}</div>
+                    <div class="pokemon__parametr pokemon__parametr_special-attack">{{ getStats['special-attack'] }}
+                    </div>
+                    <div class="pokemon__parametr pokemon__parametr_special-defense">{{ getStats['special-defense'] }}
+                    </div>
+                    <div class="pokemon__parametr pokemon__parametr_speed">{{ getStats.speed }}</div>
                 </div>
             </div>
         </section>
         <section class="pokemon__abilities abilities">
             <h2 class="pokemin__title abilities__title">Abilities</h2>
             <ul class="abilities__list">
-                <li class="abilities__item">Blaze</li>
-                <li class="abilities__item"></li>
-                <li class="abilities__item">Solar-power</li>
-            </ul>
-        </section>
-        <section class="pokemon__items items">
-            <h2 class="pokemin__title items__title">Held items</h2>
-            <ul class="items__list">
-                <li class="items__item">Some item 1</li>
-                <li class="items__item">Some item 2</li>
-                <li class="items__item">Some item 3</li>
+                <li class="abilities__item" v-for="(item, i) in getAbilities" :key="i">{{ item }}</li>
             </ul>
         </section>
     </main>
+    <preloader v-else />
 </template>
 
 <script>
+import Preloader from './Preloader.vue'
 export default {
 
+    components: {
+        Preloader
+    },
+
+    methods: {
+        loadPokemonData() {
+            const name = this.$route.params.name
+            this.$store.dispatch('loadPokemon', { name, isOne: true })
+        }
+    },
+
+    computed: {
+        getIsLoading() {
+            return this.$store.state.isLoadingPokemon
+        },
+
+        getStats() {
+            const stats = {}
+            this.$store.state.pokemon.stats.forEach(i => stats[i.stat.name] = i['base_stat'])
+            return stats
+        },
+
+        getName() {
+            const name = this.$store.state.pokemon.name
+            console.log(name);
+            return name[0].toUpperCase() + name.slice(1)
+        },
+
+        getType() {
+            return this.$store.state.pokemon.types.map(i => i.type.name).join(' / ')
+        },
+
+        getImage() {
+            return this.$store.state.pokemon.sprites.other.home['front_default']
+        },
+
+        getWeight() {
+            return this.$store.state.pokemon.weight / 10
+        },
+
+        getHeight() {
+            return this.$store.state.pokemon.height / 10
+        },
+
+        getExperience() {
+            return this.$store.state.pokemon['base_experience']
+        },
+
+        getAbilities() {
+            const abilitiesObj = {
+                1: '',
+                2: '',
+                3: ''
+            }
+
+            this.$store.state.pokemon.abilities.forEach(i => {
+                let name = i.ability.name
+                name = name[0].toUpperCase() + name.slice(1)
+
+                if (name.includes('-')) {
+                    name = name.split('-').join(' ')
+                }
+
+                abilitiesObj[i.slot] = name
+            })
+
+            return Object.values(abilitiesObj)
+        },
+
+    },
+
+    mounted() {
+        this.$store.commit('setIsLoadingPokemon', true)
+        this.loadPokemonData()
+        // console.log(this.$route.params.name);
+        // console.log(this.$store.state.pokemon);
+    }
 }
 </script>
 
@@ -76,26 +137,26 @@ export default {
     margin-bottom: 20px;
 }
 
+.pokemon__info::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 3px;
+    background-image: linear-gradient(90deg, #e5e5e5 0%, #e5e5e500 75%);
+}
+
 .pokemon__image {
     position: relative;
     height: 300px;
     width: 300px;
     background-color: #555555;
+    background-repeat: no-repeat;
+    background-size: 250px 250px;
+    background-position: center top;
     border-radius: 50%;
     flex-shrink: 0;
-}
-
-.pokemon__image::after {
-    position: absolute;
-    content: '';
-    top: 0;
-    right: 0;
-    bottom: 0;
-    left: 0;
-    background-image: url("https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/home/5.png");
-    background-repeat: no-repeat;
-    background-size: 300px 300px;
-    background-position: center;
 }
 
 .pokemon__name {
@@ -122,15 +183,8 @@ export default {
     font-size: 28px;
 }
 
-.pokemon__description-row:not(:last-child):not(.pokemon__description-column .pokemon__description-row) {
-    margin-bottom: 15px;
-}
-
-.pokemon__description-column {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 15px 30px;
-    margin-bottom: 15px;
+.pokemon__description-row:not(:last-child) {
+    margin-bottom: 20px;
 }
 
 .pokemon__description-title {
@@ -146,16 +200,16 @@ export default {
     display: flex;
     justify-content: center;
     align-items: center;
-    width: 55px;
-    height: 55px;
+    width: 80px;
+    height: 80px;
     border-radius: 50%;
     background-color: #555;
-    font-size: 22px;
+    font-size: 30px;
     font-weight: 700;
-    color: #E5E5E5CC;
+    color: #E5E5E5;
     background-repeat: no-repeat;
     background-position: center;
-    background-size: 35px 35px;
+    background-size: 60px 60px;
 }
 
 .pokemon__parametr_hp {
@@ -183,20 +237,8 @@ export default {
 }
 
 .abilities {
-    position: relative;
     padding: 0 40px 50px;
     margin-bottom: 20px;
-}
-
-.pokemon__info::after,
-.abilities::after {
-    content: '';
-    position: absolute;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    height: 3px;
-    background-image: linear-gradient(90deg, #e5e5e5 0%, #e5e5e500 75%);
 }
 
 .pokemin__title {
@@ -214,26 +256,10 @@ export default {
     line-height: 1.5;
 }
 
-.items {
-    padding: 0 40px 50px;
-    margin-bottom: 50px;
-}
-
-.items__list {
-    list-style: disc;
-    padding-left: 50px;
-}
-
-.items__item {
-    font-size: 24px;
-    line-height: 1.5;
-}
-
 @media screen and (max-width: 500px) {
 
     .pokemon__info,
-    .abilities,
-    .items {
+    .abilities {
         padding: 0 0 50px;
     }
 }

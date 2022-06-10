@@ -1,42 +1,69 @@
 <template>
-    <li class="main__item card">
-        <router-link to="/name">
-            <div class="card__wrapper">
-                <div class="card__image">
-                    <p class="card__name">Charmeleon</p>
-                </div>
-                <div class="card__content">
-                    <div class="card__description">
-                        <div class="card__description-row">
-                            <p class="card__description-title">Species:</p>
-                            <p class="card__description-text">charmander</p>
-                        </div>
-                        <div class="card__description-row">
-                            <p class="card__description-title">Type:</p>
-                            <p class="card__description-text">fire</p>
-                        </div>
-                    </div>
-                    <ul class="card__params params-card">
-                        <li class="params-card__item params-card__item_hp">120</li>
-                        <li class="params-card__item params-card__item_attack">56</li>
-                        <li class="params-card__item params-card__item_defense">22</li>
-                        <li class="params-card__item params-card__item_speed">180</li>
-                    </ul>
-                </div>
+    <li class="main__item card" @click="$router.push(`/pokemon/${pokemon.name}`)">
+        <div class="card__wrapper">
+            <div class="card__image" :style="{ backgroundImage: `url(${getImage})` }">
+                <p class="card__name">{{ getName }}</p>
             </div>
-        </router-link>
+            <div class="card__content">
+                <div class="card__description">
+                    <p class="card__description-title">Type:</p>
+                    <p class="card__description-text">{{ getType }}</p>
+                </div>
+                <ul class="card__params params-card">
+                    <li class="params-card__item params-card__item_hp">{{ getStats.hp }}</li>
+                    <li class="params-card__item params-card__item_attack">{{ getStats.attack }}</li>
+                    <li class="params-card__item params-card__item_defense">{{ getStats.defense }}</li>
+                    <li class="params-card__item params-card__item_speed">{{ getStats.speed }}</li>
+                </ul>
+            </div>
+        </div>
     </li>
 </template>
 
 <script>
 export default {
-    name: 'card-pokemon'
+    name: 'card-pokemon',
+    props: {
+        pokemon: Object,
+    },
+
+    computed: {
+        getStats() {
+            const stats = {}
+
+            this.pokemon.stats.forEach(i => stats[i.stat.name] = i['base_stat'])
+
+            return stats
+        },
+
+        getName() {
+            const name = this.pokemon.name
+
+            return name[0].toUpperCase() + name.slice(1)
+        },
+
+        getType() {
+            return this.pokemon.types.map(i => i.type.name).join(' / ')
+        },
+
+        getImage() {
+            return this.pokemon.sprites.other.home['front_default']
+        }
+    },
+
+    mounted() {
+        // console.log(this.pokemon);
+        // console.log(this.getImage);
+    }
+
+
 }
 </script>
 
 <style>
 .card {
     color: #222222;
+    cursor: pointer;
 }
 
 .card__wrapper {
@@ -75,20 +102,13 @@ export default {
 .card__description {
     padding: 10px 5px;
     border-bottom: 2px solid #505050;
-}
-
-.card__description-row {
-    display: flex;
-    align-items: center;
-    column-gap: 5px;
-}
-
-.card__description-row:not(:last-child) {
-    margin-bottom: 5px;
+    text-align: center;
 }
 
 .card__description-title {
     font-size: 18px;
+    font-weight: 700;
+    margin-bottom: 5px;
 }
 
 .params-card {
@@ -101,7 +121,7 @@ export default {
     align-items: center;
     font-size: 22px;
     font-weight: 700;
-    color: #E5E5E5CC;
+    color: #E5E5E5;
     background-repeat: no-repeat;
     background-position: center;
     background-size: 35px 35px;

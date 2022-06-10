@@ -1,29 +1,38 @@
 <template>
-    <main class="main">
+    <main class="main" v-if="!isLoading">
         <h1 class="title">Pokemons</h1>
         <ul class="main__list">
-            <card />
-            <card />
-            <card />
-            <card />
-            <card />
-            <card />
-            <card />
-            <card />
-            <card />
-            <card />
+            <card v-for="item in pokemonsList" :key="item.id" :pokemon="item" />
+
         </ul>
 
         <pagination />
     </main>
+    <preloader v-else />
 </template>
 
 <script>
 import Card from './Card.vue'
 import Pagination from './Pagination.vue'
+import Preloader from './Preloader.vue'
+import { mapState } from 'vuex'
+
 export default {
-    components: { Card, Pagination },
+    components: { Card, Pagination, Preloader },
     name: 'main-page',
+
+    computed: {
+        ...mapState({
+            pokemonsList: state => state.pokemonsList,
+            isLoading: state => state.isLoadingList,
+        }),
+    },
+
+    mounted() {
+
+        // this.$store.dispatch('loadPokemons', 1)
+        // this.$store.commit('setIsLoadingList', true)
+    }
 }
 </script>
 
