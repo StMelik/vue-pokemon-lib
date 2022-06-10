@@ -31,7 +31,7 @@ export default {
         },
 
         handleClickNextButton() {
-            const maxPage = 30
+            const maxPage = this.calculateMaxPage
             const page = this.getPage + 1
 
             if (this.getPage < maxPage) {
@@ -53,7 +53,7 @@ export default {
         },
 
         renderPagination(page) {
-            const maxPage = 30
+            const maxPage = this.calculateMaxPage
             let list = []
 
             if (page <= 3) {
@@ -71,6 +71,13 @@ export default {
     computed: {
         getPage() {
             return this.$store.state.page
+        },
+
+        calculateMaxPage() {
+            const totalPokemons = this.$store.state.totalPokemons
+            const limit = this.$store.state.limit
+
+            return Math.ceil(totalPokemons / limit)
         }
     },
 
@@ -129,7 +136,7 @@ export default {
     color: #FF7A00;
 }
 
-@media screen and (max-width: 475px) {
+@media screen and (max-width: 550px) {
     .pagination__links {
         width: 100%;
         justify-content: center;

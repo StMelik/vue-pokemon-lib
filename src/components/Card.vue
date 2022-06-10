@@ -47,7 +47,11 @@ export default {
         },
 
         getImage() {
-            return this.pokemon.sprites.other.home['front_default']
+            const mainImage = this.pokemon.sprites.other.home['front_default']
+            const image2 = this.pokemon.sprites.other['official-artwork']['front_default'];
+            const image3 = this.pokemon.sprites['front_default']
+
+            return mainImage ? mainImage : image2 ? image2 : image3
         }
     },
 

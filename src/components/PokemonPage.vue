@@ -80,7 +80,11 @@ export default {
         },
 
         getImage() {
-            return this.$store.state.pokemon.sprites.other.home['front_default']
+            const mainImage = this.$store.state.pokemon.sprites.other.home['front_default']
+            const image2 = this.$store.state.pokemon.sprites.other['official-artwork']['front_default'];
+            const image3 = this.$store.state.pokemon.sprites['front_default']
+
+            return mainImage ? mainImage : image2 ? image2 : image3
         },
 
         getWeight() {
