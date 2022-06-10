@@ -1,5 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import Main from '../components/Main'
+import PokemonPage from '../components/PokemonPage'
 
 const routes = [
   {
@@ -7,10 +8,11 @@ const routes = [
     name: 'home',
     component: Main
   },
-  // {
-  //   path: '/about',
-  //   name: 'about',
-  // }
+  {
+    path: '/name',
+    name: 'pokemon',
+    component: PokemonPage
+  }
 ]
 
 const router = createRouter({
