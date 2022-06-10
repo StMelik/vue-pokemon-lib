@@ -3,7 +3,8 @@
         <nav class="header__nav nav-header">
             <ul class="nav-header__list">
                 <li>
-                    <router-link class="nav-header__link" to="/">Home</router-link>
+                    <button class="nav-header__link"
+                        @click="$router.push({ name: 'home', query: { page: $store.state.page } })">Home</button>
                 </li>
             </ul>
         </nav>

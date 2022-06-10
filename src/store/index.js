@@ -60,7 +60,7 @@ export default createStore({
 
         commit('setTotalPokemons', resolve.data.count)
 
-        // commit('clearPokemonsList')
+        commit('clearPokemonsList')
         resolve.data.results
           .map(i => i.name)
           .forEach(name => {

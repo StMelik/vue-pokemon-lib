@@ -1,22 +1,83 @@
 <template>
     <div class="pagination">
-        <button class="pagination__button pagination__button_prev"></button>
+        <button class="pagination__button pagination__button_prev" @click="handleClickPrevButton"></button>
         <div class="pagination__links">
-            <button class="pagination__link pagination__link_active">1</button>
-            <button class="pagination__link">2</button>
-            <button class="pagination__link">3</button>
-            <button class="pagination__link">4</button>
-            <button class="pagination__link">5</button>
-            <p class="pagination__link">...</p>
-            <button class="pagination__link">55</button>
+            <button class="pagination__link" @click="handleClickButton" v-for="(p, i) in renderPagination(getPage)"
+                :key="i" :class="{
+                    'pagination__link_active': p === getPage,
+                    'disabled': p === '...'
+                }">
+                {{ p }}
+            </button>
         </div>
-        <button class="pagination__button pagination__button_next"></button>
+        <button class="pagination__button pagination__button_next" @click="handleClickNextButton"></button>
     </div>
 </template>
 
 <script>
 export default {
     name: 'main-pagination',
+
+    methods: {
+        handleClickButton(evt) {
+            const page = evt.target.textContent
+            if (page !== '...') {
+                this.$router.push({ name: 'home', query: { page } })
+                this.$store.commit('setIsLoadingList', true)
+                // this.$store.commit('clearPokemonsList')
+                this.$store.commit('setPage', +page)
+                this.$store.dispatch('loadPokemons', page)
+            }
+        },
+
+        handleClickNextButton() {
+            const maxPage = 30
+            const page = this.getPage + 1
+
+            if (this.getPage < maxPage) {
+                this.$store.commit('setIsLoadingList', true)
+                this.$store.commit('setPage', page)
+                this.$store.dispatch('loadPokemons', page)
+                this.$router.push({ name: 'home', query: { page } })
+            }
+        },
+
+        handleClickPrevButton() {
+            const page = this.getPage - 1
+            if (this.getPage > 1) {
+                this.$store.commit('setIsLoadingList', true)
+                this.$store.commit('setPage', page)
+                this.$store.dispatch('loadPokemons', page)
+                this.$router.push({ name: 'home', query: { page } })
+            }
+        },
+
+        renderPagination(page) {
+            const maxPage = 30
+            let list = []
+
+            if (page <= 3) {
+                list = [1, 2, 3, 4, '...', maxPage]
+            } else if (page >= maxPage - 2) {
+                list = [1, '...', maxPage - 3, maxPage - 2, maxPage - 1, maxPage]
+            } else {
+                list = [1, '...', page - 1, page, page + 1, '...', maxPage]
+            }
+
+            return list
+        }
+    },
+
+    computed: {
+        getPage() {
+            return this.$store.state.page
+        }
+    },
+
+    mounted() {
+        // console.log(this.$route.query.page);
+        // this.$store.dispatch('loadPokemons', this.$route.query.page)
+    }
 }
 </script>
 
@@ -56,11 +117,19 @@ export default {
     font-size: 32px;
 }
 
+.disabled {
+    cursor: default;
+}
+
+.disabled:hover {
+    opacity: 1;
+}
+
 .pagination__link_active {
     color: #FF7A00;
 }
 
-@media screen and (max-width: 425px) {
+@media screen and (max-width: 475px) {
     .pagination__links {
         width: 100%;
         justify-content: center;

@@ -16,7 +16,9 @@ export default {
   },
 
   mounted() {
-    this.$store.dispatch('loadPokemons')
+    // this.$store.dispatch('loadPokemons', this.$route.query.page)
+    // console.log('route app', this.$route);
+    // console.log('page app', this.$route.query.page);
     // console.log('mounted App');
   }
 }
