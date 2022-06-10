@@ -15,18 +15,35 @@
 </template>
 
 <script>
+import { mapActions, mapMutations, mapState } from 'vuex'
+
 export default {
     name: 'main-pagination',
 
     methods: {
+        ...mapMutations({
+            setIsLoadingList: 'setIsLoadingList',
+            setPage: 'setPage',
+        }),
+
+        ...mapActions({
+            loadPokemons: 'loadPokemons',
+        }),
+
         handleClickButton(evt) {
             const page = evt.target.textContent
             if (page !== '...') {
-                this.$router.push({ name: 'home', query: { page } })
-                this.$store.commit('setIsLoadingList', true)
+                if (this.searchQuery) {
+                    this.$router.push({ name: 'home', query: { search: this.searchQuery, page } })
+                } else {
+                    this.$router.push({ name: 'home', query: { search: null, page } })
+                }
+
+                // this.$router.push({ name: 'home', query: { page } })
+                this.setIsLoadingList(true)
                 // this.$store.commit('clearPokemonsList')
-                this.$store.commit('setPage', +page)
-                this.$store.dispatch('loadPokemons', page)
+                this.setPage(+page)
+                this.loadPokemons(page)
             }
         },
 
@@ -35,9 +52,9 @@ export default {
             const page = this.getPage + 1
 
             if (this.getPage < maxPage) {
-                this.$store.commit('setIsLoadingList', true)
-                this.$store.commit('setPage', page)
-                this.$store.dispatch('loadPokemons', page)
+                this.setIsLoadingList(true)
+                this.setPage(page)
+                this.loadPokemons(page)
                 this.$router.push({ name: 'home', query: { page } })
             }
         },
@@ -45,9 +62,9 @@ export default {
         handleClickPrevButton() {
             const page = this.getPage - 1
             if (this.getPage > 1) {
-                this.$store.commit('setIsLoadingList', true)
-                this.$store.commit('setPage', page)
-                this.$store.dispatch('loadPokemons', page)
+                this.setIsLoadingList(true)
+                this.setPage(page)
+                this.loadPokemons(page)
                 this.$router.push({ name: 'home', query: { page } })
             }
         },
@@ -55,6 +72,18 @@ export default {
         renderPagination(page) {
             const maxPage = this.calculateMaxPage
             let list = []
+
+            console.log(maxPage);
+
+            if (maxPage <= 5) {
+                console.log('maxPage < 5');
+                for (let i = 1; i <= maxPage; i++) {
+                    console.log(i);
+                    list.push(i)
+                }
+                console.log('list pagin', list);
+                return list
+            }
 
             if (page <= 3) {
                 list = [1, 2, 3, 4, '...', maxPage]
@@ -69,6 +98,10 @@ export default {
     },
 
     computed: {
+        ...mapState({
+            searchQuery: state => state.searchQuery,
+        }),
+
         getPage() {
             return this.$store.state.page
         },

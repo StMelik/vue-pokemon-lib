@@ -54,7 +54,7 @@ export default {
     methods: {
         loadPokemonData() {
             const name = this.$route.params.name
-            this.$store.dispatch('loadPokemon', { name, isOne: true })
+            this.$store.dispatch('loadPokemon', { name, type: 'one' })
         }
     },
 

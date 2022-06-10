@@ -29,11 +29,20 @@ export default {
     },
 
     methods: {
-        loadPage(page) {
+        loadPage() {
+            const page = +this.$route.query.page
+            const search = this.$route.query.search
+
+            if (search) {
+                this.$store.dispatch('loadPokemonNameList')
+                // this.$store.commit('setPokemonNameFilterList')
+                this.$store.commit('setSearchQuery', search)
+            }
+
             this.$store.dispatch('loadPokemons', page)
-            console.log('p', page);
+            // console.log('p', page);
             if (!Number.isNaN(page)) {
-                console.log('isNaN', page);
+                // console.log('isNaN', page);
                 this.$store.commit('setPage', page)
             } else {
                 this.$store.commit('setPage', 1)
@@ -46,7 +55,7 @@ export default {
         console.log(typeof NaN);
         // this.$store.dispatch('loadPokemons', 1)
         // this.$store.commit('setIsLoadingList', true)
-        this.loadPage(+this.$route.query.page)
+        this.loadPage()
         // this.$store.dispatch('loadPokemons', this.$route.query.page)
         // this.$store.commit('setPage', +this.$route.query.page)
         // console.log('route main', this.$route);
