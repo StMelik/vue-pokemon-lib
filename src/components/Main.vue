@@ -15,7 +15,7 @@
 import Card from './Card.vue'
 import Pagination from './Pagination.vue'
 import Preloader from './Preloader.vue'
-import { mapState } from 'vuex'
+import { mapActions, mapMutations, mapState } from 'vuex'
 
 export default {
     components: { Card, Pagination, Preloader },
@@ -23,43 +23,42 @@ export default {
 
     computed: {
         ...mapState({
-            pokemonsList: state => state.pokemonsList,
-            isLoading: state => state.isLoadingList,
+            pokemonsList: state => state.pokemons.pokemonsList,
+            isLoading: state => state.loader.isLoadingList,
         }),
     },
 
     methods: {
+        ...mapMutations({
+            setSearchQuery: 'search/setSearchQuery',
+            setPage: 'pagination/setPage',
+        }),
+
+        ...mapActions({
+            loadPokemonNameList: 'search/loadPokemonNameList',
+            loadPokemons: 'pokemons/loadPokemons',
+        }),
+
         loadPage() {
             const page = +this.$route.query.page
             const search = this.$route.query.search
 
             if (search) {
-                this.$store.dispatch('loadPokemonNameList')
+                this.loadPokemonNameList()
                 // this.$store.commit('setPokemonNameFilterList')
-                this.$store.commit('setSearchQuery', search)
+                this.setSearchQuery(search)
             }
 
-            this.$store.dispatch('loadPokemons', page)
-            // console.log('p', page);
-            if (!Number.isNaN(page)) {
-                // console.log('isNaN', page);
-                this.$store.commit('setPage', page)
-            } else {
-                this.$store.commit('setPage', 1)
-            }
+            this.loadPokemons(page)
 
+            !Number.isNaN(page)
+                ? this.setPage(page)
+                : this.setPage(1)
         }
     },
 
     mounted() {
-        console.log(typeof NaN);
-        // this.$store.dispatch('loadPokemons', 1)
-        // this.$store.commit('setIsLoadingList', true)
         this.loadPage()
-        // this.$store.dispatch('loadPokemons', this.$route.query.page)
-        // this.$store.commit('setPage', +this.$route.query.page)
-        // console.log('route main', this.$route);
-        // console.log('page main', this.$route.query.page);
     }
 }
 </script>

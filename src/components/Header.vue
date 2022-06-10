@@ -22,24 +22,29 @@
 </template>
 
 <script>
-import { mapMutations, mapState } from 'vuex'
+import { mapActions, mapMutations, mapState } from 'vuex'
 export default {
     name: 'main-header',
 
     methods: {
         ...mapMutations({
-            setIsLoadingNameList: 'setIsLoadingNameList',
-            setPokemonNameFilterList: 'setPokemonNameFilterList',
-            clearPokemonsList: 'clearPokemonsList',
-            setIsLoadingList: 'setIsLoadingList',
-            setTotalPokemons: 'setTotalPokemons',
-            setSearchQuery: 'setSearchQuery',
+            setIsLoadingNameList: 'loader/setIsLoadingNameList',
+            setPokemonNameFilterList: 'search/setPokemonNameFilterList',
+            clearPokemonsList: 'pokemons/clearPokemonsList',
+            setIsLoadingList: 'loader/setIsLoadingList',
+            setTotalPokemons: 'pagination/setTotalPokemons',
+            setSearchQuery: 'search/setSearchQuery',
+        }),
+
+        ...mapActions({
+            loadPokemonNameList: 'search/loadPokemonNameList',
+            loadPokemon: 'pokemons/loadPokemon',
         }),
 
         handleInputForm(evt) {
             // if (!this.pokemonsNameList) {
             this.setSearchQuery(evt.target.value)
-            this.$store.dispatch('loadPokemonNameList')
+            this.loadPokemonNameList()
             // }
 
 
@@ -79,21 +84,20 @@ export default {
             this.clearPokemonsList()
             this.setTotalPokemons(this.pokemonNameFilterList.length)
             this.pokemonNameFilterList.slice(0, this.limit).forEach(name => {
-
-                this.$store.dispatch('loadPokemon', { name, type: 'filter' })
+                this.loadPokemon({ name, type: 'filter' })
             })
         }
     },
 
     computed: {
         ...mapState({
-            isLoadingNameList: state => state.isLoadingNameList,
-            pokemonsNameList: state => state.pokemonsNameList,
-            pokemonNameFilterList: state => state.pokemonNameFilterList,
-            limitSearchList: state => state.limitSearchList,
-            limit: state => state.limit,
-            page: state => state.page,
-            searchQuery: state => state.searchQuery,
+            isLoadingNameList: state => state.loader.isLoadingNameList,
+            pokemonsNameList: state => state.search.pokemonsNameList,
+            pokemonNameFilterList: state => state.search.pokemonNameFilterList,
+            limitSearchList: state => state.search.limitSearchList,
+            limit: state => state.pagination.limit,
+            page: state => state.pagination.page,
+            searchQuery: state => state.search.searchQuery,
         }),
 
         getFilterName() {

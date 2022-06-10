@@ -1,19 +1,19 @@
 <template>
     <li class="main__item card" @click="$router.push(`/pokemon/${pokemon.name}`)">
         <div class="card__wrapper">
-            <div class="card__image" :style="{ backgroundImage: `url(${getImage})` }">
-                <p class="card__name">{{ getName }}</p>
+            <div class="card__image" :style="{ backgroundImage: `url(${pokemon.image})` }">
+                <p class="card__name">{{ pokemon.name }}</p>
             </div>
             <div class="card__content">
                 <div class="card__description">
                     <p class="card__description-title">Type:</p>
-                    <p class="card__description-text">{{ getType }}</p>
+                    <p class="card__description-text">{{ pokemon.types }}</p>
                 </div>
                 <ul class="card__params params-card">
-                    <li class="params-card__item params-card__item_hp">{{ getStats.hp }}</li>
-                    <li class="params-card__item params-card__item_attack">{{ getStats.attack }}</li>
-                    <li class="params-card__item params-card__item_defense">{{ getStats.defense }}</li>
-                    <li class="params-card__item params-card__item_speed">{{ getStats.speed }}</li>
+                    <li class="params-card__item params-card__item_hp">{{ pokemon.stats.hp }}</li>
+                    <li class="params-card__item params-card__item_attack">{{ pokemon.stats.attack }}</li>
+                    <li class="params-card__item params-card__item_defense">{{ pokemon.stats.defense }}</li>
+                    <li class="params-card__item params-card__item_speed">{{ pokemon.stats.speed }}</li>
                 </ul>
             </div>
         </div>
@@ -26,41 +26,6 @@ export default {
     props: {
         pokemon: Object,
     },
-
-    computed: {
-        getStats() {
-            const stats = {}
-
-            this.pokemon.stats.forEach(i => stats[i.stat.name] = i['base_stat'])
-
-            return stats
-        },
-
-        getName() {
-            const name = this.pokemon.name
-
-            return name[0].toUpperCase() + name.slice(1)
-        },
-
-        getType() {
-            return this.pokemon.types.map(i => i.type.name).join(' / ')
-        },
-
-        getImage() {
-            const mainImage = this.pokemon.sprites.other.home['front_default']
-            const image2 = this.pokemon.sprites.other['official-artwork']['front_default'];
-            const image3 = this.pokemon.sprites['front_default']
-
-            return mainImage ? mainImage : image2 ? image2 : image3
-        }
-    },
-
-    mounted() {
-        // console.log(this.pokemon);
-        // console.log(this.getImage);
-    }
-
-
 }
 </script>
 
@@ -79,7 +44,6 @@ export default {
 
 .card__image {
     position: relative;
-    background-image: url("https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/home/5.png");
     background-repeat: no-repeat;
     background-size: 160px 160px;
     background-position: center top;

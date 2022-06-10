@@ -1,26 +1,21 @@
 <template>
   <div class="container">
-    <MainHeader />
+    <Header />
     <router-view></router-view>
 
   </div>
 </template>
 
 <script>
-import MainHeader from './Header.vue'
+import Header from './Header.vue'
 
 export default {
   name: 'App',
-  components: {
-    MainHeader,
-  },
+  components: { Header },
 
-  mounted() {
-    // this.$store.dispatch('loadPokemons', this.$route.query.page)
-    // console.log('route app', this.$route);
-    // console.log('page app', this.$route.query.page);
-    // console.log('mounted App');
-  }
+  // mounted() {
+
+  // }
 }
 </script>
 

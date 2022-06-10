@@ -2,9 +2,9 @@
     <div class="pagination">
         <button class="pagination__button pagination__button_prev" @click="handleClickPrevButton"></button>
         <div class="pagination__links">
-            <button class="pagination__link" @click="handleClickButton" v-for="(p, i) in renderPagination(getPage)"
+            <button class="pagination__link" @click="handleClickButton" v-for="(p, i) in renderPagination(page)"
                 :key="i" :class="{
-                    'pagination__link_active': p === getPage,
+                    'pagination__link_active': p === page,
                     'disabled': p === '...'
                 }">
                 {{ p }}
@@ -22,12 +22,12 @@ export default {
 
     methods: {
         ...mapMutations({
-            setIsLoadingList: 'setIsLoadingList',
-            setPage: 'setPage',
+            setIsLoadingList: 'loader/setIsLoadingList',
+            setPage: 'pagination/setPage',
         }),
 
         ...mapActions({
-            loadPokemons: 'loadPokemons',
+            loadPokemons: 'pokemons/loadPokemons',
         }),
 
         handleClickButton(evt) {
@@ -49,9 +49,9 @@ export default {
 
         handleClickNextButton() {
             const maxPage = this.calculateMaxPage
-            const page = this.getPage + 1
+            const page = this.page + 1
 
-            if (this.getPage < maxPage) {
+            if (this.page < maxPage) {
                 this.setIsLoadingList(true)
                 this.setPage(page)
                 this.loadPokemons(page)
@@ -60,8 +60,8 @@ export default {
         },
 
         handleClickPrevButton() {
-            const page = this.getPage - 1
-            if (this.getPage > 1) {
+            const page = this.page - 1
+            if (this.page > 1) {
                 this.setIsLoadingList(true)
                 this.setPage(page)
                 this.loadPokemons(page)
@@ -99,18 +99,14 @@ export default {
 
     computed: {
         ...mapState({
-            searchQuery: state => state.searchQuery,
+            searchQuery: state => state.search.searchQuery,
+            totalPokemons: state => state.pagination.totalPokemons,
+            limit: state => state.pagination.limit,
+            page: state => state.pagination.page,
         }),
 
-        getPage() {
-            return this.$store.state.page
-        },
-
         calculateMaxPage() {
-            const totalPokemons = this.$store.state.totalPokemons
-            const limit = this.$store.state.limit
-
-            return Math.ceil(totalPokemons / limit)
+            return Math.ceil(this.totalPokemons / this.limit)
         }
     },
 
