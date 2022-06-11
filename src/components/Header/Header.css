@@ -57,22 +57,17 @@
     left: 0;
     right: 50px;
     transform: translateY(40px);
-    background-color: #555555;
+    background-color: #a1a1a1;
     z-index: 10;
-    border-radius: 20px 0 20px 20px;
+    border-radius: 20px 0 20px 0;
 }
 
 .search__item {
-    font-size: 20px;
-    padding: 15px 20px;
-    transition: opacity 0.3s;
-    cursor: pointer;
-}
-
-.search__item:hover {
-    opacity: 0.5;
+    color: #222222;
+    font-size: 18px;
+    padding: 5px 10px;
 }
 
 .search__item:not(:last-child) {
-    border-bottom: 1px solid #e5e5e5;
+    border-bottom: 2px solid #222222;
 }
