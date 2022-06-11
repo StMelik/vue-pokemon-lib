@@ -30,16 +30,12 @@ export default {
             loadPokemons: 'pokemons/loadPokemons',
         }),
 
-        setQueryPath(page) { // Повтор в хедере
-            (this.searchQuery)
-                ? this.$router.push({
-                    name: 'home',
-                    query: { search: this.searchQuery, page }
-                })
-                : this.$router.push({
-                    name: 'home',
-                    query: { page }
-                })
+        setQueryPath(page) {
+            const query = this.searchQuery
+                ? { page, search: this.searchQuery }
+                : { page }
+
+            this.$router.push({ name: 'home', query })
         },
 
         loadPage(page) {
@@ -95,8 +91,6 @@ export default {
     computed: {
         ...mapState({
             searchQuery: state => state.search.searchQuery,
-            totalPokemons: state => state.pagination.totalPokemons,
-            limit: state => state.pagination.limit,
             page: state => state.pagination.page,
         }),
 
@@ -104,66 +98,9 @@ export default {
             getMaxPage: 'pagination/getMaxPage',
         }),
     },
-
-    mounted() {
-
-    }
 }
 </script>
 
 <style>
-.pagination {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    justify-content: center;
-    gap: 15px 25px;
-    margin-bottom: 50px;
-}
-
-.pagination__button {
-    width: 50px;
-    height: 50px;
-    border: 2px solid #E5E5E5;
-    border-radius: 50%;
-    background-image: url('../assets/icons/arrow-icon.svg');
-    background-repeat: no-repeat;
-    background-position: center;
-    background-size: 30px 30px;
-    flex-shrink: 0;
-}
-
-.pagination__button_next {
-    transform: rotate(180deg);
-}
-
-.pagination__links {
-    display: flex;
-    column-gap: 10px;
-    align-items: flex-end;
-}
-
-.pagination__link {
-    font-size: 32px;
-}
-
-.disabled {
-    cursor: default;
-}
-
-.disabled:hover {
-    opacity: 1;
-}
-
-.pagination__link_active {
-    color: #FF7A00;
-}
-
-@media screen and (max-width: 550px) {
-    .pagination__links {
-        width: 100%;
-        justify-content: center;
-        order: -1;
-    }
-}
+@import './Pagination.css'
 </style>

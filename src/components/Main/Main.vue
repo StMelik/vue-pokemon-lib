@@ -3,19 +3,19 @@
         <h1 class="title">Pokemons</h1>
         <ul class="main__list">
             <card v-for="item in pokemonsList" :key="item.id" :pokemon="item" />
-
         </ul>
 
         <pagination />
     </main>
+    <h3 v-else-if="isNotFound" class="not-found">Nothing found!</h3>
     <preloader v-else />
 </template>
 
 <script>
-import Card from './Card.vue'
-import Pagination from './Pagination.vue'
-import Preloader from './Preloader.vue'
 import { mapActions, mapMutations, mapState } from 'vuex'
+import Card from '@/components/Card/Card.vue'
+import Pagination from '@/components/Pagination/Pagination.vue'
+import Preloader from '@/components/Preloader.vue'
 
 export default {
     components: { Card, Pagination, Preloader },
@@ -25,6 +25,7 @@ export default {
         ...mapState({
             pokemonsList: state => state.pokemons.pokemonsList,
             isLoading: state => state.loader.isLoadingList,
+            isNotFound: state => state.search.isNotFound,
         }),
     },
 
@@ -35,28 +36,15 @@ export default {
         }),
 
         ...mapActions({
-            loadPokemonNameList: 'search/loadPokemonNameList',
-            // loadTotalPokemons: 'search/loadTotalPokemons',
             loadPokemons: 'pokemons/loadPokemons',
         }),
 
-        // checkQueryPageUrl(query) {
-        //     if (typeof query !== 'number') {
-        //         this.$router.push({ query: {} })
-        //     }
-        // },
-
-        async loadPage() {
+        loadPage() {
             const page = +this.$route.query.page || 1
-            const search = this.$route.query.search
 
-            if (search) {
-                this.setSearchQuery(search)
-                await this.loadPokemonNameList()
-            }
-
-            await this.loadPokemons(page) // Отрисовать карточки по странице
+            this.setSearchQuery(this.$route.query.search || '')
             this.setPage(page)
+            this.loadPokemons(page)
         }
     },
 
@@ -67,20 +55,5 @@ export default {
 </script>
 
 <style>
-.main {
-    padding-top: 30px;
-}
-
-.title {
-    font-size: 48px;
-    margin-bottom: 40px;
-    text-align: center;
-}
-
-.main__list {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(198px, 1fr));
-    gap: 30px;
-    margin-bottom: 50px;
-}
+@import './Main.css'
 </style>

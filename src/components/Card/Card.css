@@ -1,0 +1,84 @@
+.card {
+    color: #222222;
+    cursor: pointer;
+}
+
+.card__wrapper {
+    background-color: #e5e5e5;
+    border: 2px solid #505050;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.card__image {
+    position: relative;
+    background-repeat: no-repeat;
+    background-size: 160px 160px;
+    background-position: center top;
+    height: 200px;
+    border-bottom: 2px solid #505050;
+}
+
+.card__name {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-image: linear-gradient(90deg, #505050 0%, rgba(34, 34, 34, 0) 75%);
+    padding: 4px 10px 2px;
+    font-size: 20px;
+}
+
+.card__content {
+    background-image: linear-gradient(180deg, rgba(80, 80, 80, 0) -15%, #505050 100%);
+}
+
+.card__description {
+    padding: 10px 5px;
+    border-bottom: 2px solid #505050;
+    text-align: center;
+}
+
+.card__description-title {
+    font-size: 18px;
+    font-weight: 700;
+    margin-bottom: 5px;
+}
+
+.params-card {
+    display: flex;
+}
+
+.params-card__item {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 22px;
+    font-weight: 700;
+    color: #e5e5e5;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: 35px 35px;
+    height: 50px;
+    width: 25%;
+}
+
+.params-card__item:not(:last-child) {
+    border-right: 2px solid #505050;
+}
+
+.params-card__item_hp {
+    background-image: url("@/assets/icons/heart-icon.svg");
+}
+
+.params-card__item_attack {
+    background-image: url("@/assets/icons/sword-icon.svg");
+}
+
+.params-card__item_defense {
+    background-image: url("@/assets/icons/shield-icon.svg");
+}
+
+.params-card__item_speed {
+    background-image: url("@/assets/icons/speed-icon.svg");
+}

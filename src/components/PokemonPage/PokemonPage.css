@@ -1,0 +1,134 @@
+.pokemon__info {
+    position: relative;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 50px 100px;
+    padding: 0 30px 50px;
+    margin-bottom: 20px;
+}
+
+.pokemon__info::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 3px;
+    background-image: linear-gradient(90deg, #e5e5e5 0%, #e5e5e500 75%);
+}
+
+.pokemon__image {
+    position: relative;
+    height: 300px;
+    width: 300px;
+    background-color: #555555;
+    background-repeat: no-repeat;
+    background-size: 250px 250px;
+    background-position: center top;
+    border-radius: 50%;
+    flex-shrink: 0;
+}
+
+.pokemon__name {
+    position: relative;
+    padding: 20px 40px;
+    font-size: 40px;
+    font-weight: 700;
+    margin-bottom: 40px;
+}
+
+.pokemon__name::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 5px;
+    background-image: linear-gradient(90deg, #e5e5e5 0%, #e5e5e500 75%);
+}
+
+.pokemon__description-row {
+    display: flex;
+    column-gap: 5px;
+    font-size: 28px;
+}
+
+.pokemon__description-row:not(:last-child) {
+    margin-bottom: 20px;
+}
+
+.pokemon__description-title {
+    font-weight: 700;
+}
+
+.pokemon__parametr-list {
+    flex-wrap: wrap;
+    gap: 15px;
+}
+
+.pokemon__parametr {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    background-color: #555;
+    font-size: 30px;
+    font-weight: 700;
+    color: #e5e5e5;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: 60px 60px;
+}
+
+.pokemon__parametr_hp {
+    background-image: url("@/assets/icons/heart-icon.svg");
+}
+
+.pokemon__parametr_attack {
+    background-image: url("@/assets/icons/sword-icon.svg");
+}
+
+.pokemon__parametr_defense {
+    background-image: url("@/assets/icons/shield-icon.svg");
+}
+
+.pokemon__parametr_special-attack {
+    background-image: url("@/assets/icons/special-sword-icon.svg");
+}
+
+.pokemon__parametr_special-defense {
+    background-image: url("@/assets/icons/special-shield-icon.svg");
+}
+
+.pokemon__parametr_speed {
+    background-image: url("@/assets/icons/speed-icon.svg");
+}
+
+.abilities {
+    padding: 0 40px 50px;
+    margin-bottom: 20px;
+}
+
+.pokemin__title {
+    font-size: 32px;
+    margin-bottom: 25px;
+}
+
+.abilities__list {
+    list-style: decimal;
+    padding-left: 50px;
+}
+
+.abilities__item {
+    font-size: 24px;
+    line-height: 1.5;
+}
+
+@media screen and (max-width: 500px) {
+    .pokemon__info,
+    .abilities {
+        padding: 0 0 50px;
+    }
+}

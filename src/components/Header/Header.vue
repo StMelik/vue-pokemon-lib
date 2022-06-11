@@ -23,6 +23,7 @@
 
 <script>
 import { mapActions, mapMutations, mapState, mapGetters } from 'vuex'
+
 export default {
     name: 'main-header',
 
@@ -42,15 +43,11 @@ export default {
         }),
 
         setQueryPath() {
-            (this.searchQuery)
-                ? this.$router.push({
-                    name: 'home',
-                    query: { search: this.searchQuery, page: this.page }
-                })
-                : this.$router.push({
-                    name: 'home',
-                    query: { page: this.page }
-                })
+            const query = this.searchQuery
+                ? { page: this.page, search: this.searchQuery }
+                : { page: this.page }
+
+            this.$router.push({ name: 'home', query })
         },
 
         handleSubmitForm() {
@@ -70,7 +67,6 @@ export default {
     computed: {
         ...mapState({
             pokemonsNameList: state => state.search.pokemonsNameList,
-            limitSearchList: state => state.search.limitSearchList,
             limit: state => state.pagination.limit,
             page: state => state.pagination.page,
             searchQuery: state => state.search.searchQuery,
@@ -87,7 +83,7 @@ export default {
         searchQuery() {
             const hasSearchQuery = !!this.searchQuery
             const hasPokemonsNameList = !!this.pokemonsNameList
-            const hasFocus = document.activeElement === this.$refs.input
+            const hasFocus = document.activeElement === this.$refs.input;
 
             this.loadPokemonNameList();
 
@@ -100,82 +96,5 @@ export default {
 </script>
 
 <style>
-.header {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: space-between;
-    align-items: center;
-    gap: 30px 40px;
-    padding: 30px;
-    border-bottom: 1px solid #E5E5E5;
-}
-
-@media screen and (max-width: 500px) {
-    .header {
-        padding: 30px 0;
-    }
-}
-
-.nav-header__list {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 15px 35px;
-}
-
-.nav-header__link {
-    font-size: 30px;
-}
-
-.search-header {
-    position: relative;
-    display: flex;
-}
-
-.search-header__input {
-    padding: 5px 15px;
-    border: 2px solid #E5E5E5;
-    border-radius: 20px 0 0 20px;
-    background-color: transparent;
-    color: inherit;
-    font-size: 26px;
-    width: 100%;
-    height: 40px;
-}
-
-.search-header__button {
-    width: 50px;
-    height: 40px;
-    border-radius: 0 20px 20px 0;
-    background-color: #E5E5E5;
-    background-image: url('../assets/icons/search-icon.svg');
-    background-repeat: no-repeat;
-    background-position: 40% center;
-    background-size: 25px 25px;
-    flex-shrink: 0;
-}
-
-.search__list {
-    position: absolute;
-    left: 0;
-    right: 50px;
-    transform: translateY(40px);
-    background-color: #555555;
-    z-index: 10;
-    border-radius: 20px 0 20px 20px;
-}
-
-.search__item {
-    font-size: 20px;
-    padding: 15px 20px;
-    transition: opacity .3s;
-    cursor: pointer;
-}
-
-.search__item:hover {
-    opacity: .5;
-}
-
-.search__item:not(:last-child) {
-    border-bottom: 1px solid #E5E5E5;
-}
+@import './Header.css'
 </style>
