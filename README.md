@@ -1,24 +1,19 @@
-# test-pokemon
+# Библиотека покемонов
 
-## Project setup
-```
-npm install
-```
+## Описание
+В этом проекте реализовано одностраничное приложение, которое работает в браузере — библиотека покемонов. Приложение позволяет искать и просматривать информацию о покемонах.
 
-### Compiles and hot-reloads for development
-```
-npm run serve
-```
+## Функциональность
+* Поиск покемонов.
+* Просмотр подробной информации покемона.
 
-### Compiles and minifies for production
-```
-npm run build
-```
+## Технологии
+* HTML
+* CSS
+* JavaScript
+* Vue
+* Vuex
+* Vue Router
 
-### Lints and fixes files
-```
-npm run lint
-```
-
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+### GH-Pages
+[Ссылка на проект](https://stmelik.github.io/vue-pokemon-lib/)
