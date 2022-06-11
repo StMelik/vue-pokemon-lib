@@ -20,7 +20,6 @@ export default {
         setPokemonsList(state, payload) {
             state.pokemonsList.push({
                 ...payload,
-                name: formatName(payload.name),
                 types: formatPokemonType(payload.types),
                 stats: formatPokemonStats(payload.stats),
                 image: formatPokemonImage(payload.sprites),
@@ -45,33 +44,50 @@ export default {
         },
     },
     actions: {
-        async loadPokemons({ commit, dispatch, rootState }, page) {
+        // async loadSearchPokemons() {
+
+        //     // очистить список карточек
+        //     commit('clearPokemonsList')
+
+        //     commit('pagination/setTotalPokemons', rootGetters['search/getPokemonNameFilterList'].length, { root: true })
+
+        //     // получить отфильтрованные имена
+        //     rootGetters['search/getPokemonNameFilterList']
+        //         .slice((page - 1) * rootState.pagination.limit, page * rootState.pagination.limit)
+        //         .forEach(name => {
+        //             dispatch('loadPokemon', { name, type: 'multi' })
+        //         })
+        // },
+
+
+        async loadPokemons({ commit, dispatch, rootState, rootGetters }, page) {
+            const hasSearchQuery = rootState.search.searchQuery
+            const limit = rootState.pagination.limit
+            const pokemonNameFilterList = rootGetters['search/getPokemonNameFilterList']
+
+            commit('clearPokemonsList')
+
+            if (hasSearchQuery) {
+                commit('pagination/setTotalPokemons', pokemonNameFilterList.length, { root: true })
+
+                pokemonNameFilterList
+                    .slice((page - 1) * limit, page * limit)
+                    .forEach(name => {
+                        dispatch('loadPokemon', { name, type: 'multi' })
+                    })
+                return
+            }
+
             try {
+                const resolvePokemonsName = await api.fetchPokemons(page, limit)
 
-                if (rootState.search.searchQuery) {
-                    commit('clearPokemonsList')
-                    rootState.search.pokemonNameFilterList
-                        .slice((page - 1) * rootState.pagination.limit, page * rootState.pagination.limit)
-                        .forEach(name => {
-                            dispatch('loadPokemon', { name, type: 'multi' })
-                        })
-                    return
-                }
+                commit('pagination/setTotalPokemons', resolvePokemonsName.data.count, { root: true })
 
-                const resolve = await api.fetchPokemons(page, rootState.pagination.limit)
-
-                commit('pagination/setTotalPokemons', resolve.data.count, { root: true })
-
-                commit('clearPokemonsList')
-                resolve.data.results
+                resolvePokemonsName.data.results
                     .map(i => i.name)
                     .forEach(name => {
                         dispatch('loadPokemon', { name, type: 'multi' })
                     });
-
-                // commit('setIsLoading', false)
-
-                // dispatch('loadPokemonNameList')
 
             } catch (err) {
                 console.log(err);
@@ -80,27 +96,19 @@ export default {
 
         async loadPokemon({ commit }, { name, type }) {
             try {
-                const resolve = await api.fetchPokemon(name)
+                const resolvePokemon = await api.fetchPokemon(name)
+
                 switch (type) {
                     case 'one':
-                        commit('setPokemon', resolve.data)
+                        commit('setPokemon', resolvePokemon.data)
                         commit('loader/setIsLoadingPokemon', false, { root: true })
                         break;
 
                     case 'multi':
-                        commit('setPokemonsList', resolve.data)
-                        commit('loader/setIsLoadingList', false, { root: true })
-                        break;
-
-                    case 'filter':
-                        // commit('setPokemonFilterList', resolve.data)
-                        // commit('clearPokemonsList')
-                        commit('setPokemonsList', resolve.data)
+                        commit('setPokemonsList', resolvePokemon.data)
                         commit('loader/setIsLoadingList', false, { root: true })
                         break;
                 }
-
-                // commit('setIsLoading', false)
             } catch (err) {
                 console.log(err);
             }

@@ -5,7 +5,13 @@ export default {
         totalPokemons: 0, // Всего покемонов
         limit: 10, // Отображаемое количество карточек на странице
         page: 1, // Номер страницы
-        buttons: 5, // Количество кнопок пагинации (В планах)
+        // buttons: 5, // Количество кнопок пагинации (В планах)
+    },
+
+    getters: {
+        getMaxPage(state) {
+            return Math.ceil(state.totalPokemons / state.limit)
+        }
     },
 
     mutations: {

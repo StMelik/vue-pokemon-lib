@@ -15,7 +15,7 @@
 </template>
 
 <script>
-import { mapActions, mapMutations, mapState } from 'vuex'
+import { mapActions, mapGetters, mapMutations, mapState } from 'vuex'
 
 export default {
     name: 'main-pagination',
@@ -30,58 +30,53 @@ export default {
             loadPokemons: 'pokemons/loadPokemons',
         }),
 
+        setQueryPath(page) { // Повтор в хедере
+            (this.searchQuery)
+                ? this.$router.push({
+                    name: 'home',
+                    query: { search: this.searchQuery, page }
+                })
+                : this.$router.push({
+                    name: 'home',
+                    query: { page }
+                })
+        },
+
+        loadPage(page) {
+            this.setIsLoadingList(true)
+            this.setPage(+page)
+            this.loadPokemons(page)
+            this.setQueryPath(page)
+        },
+
         handleClickButton(evt) {
             const page = evt.target.textContent
             if (page !== '...') {
-                if (this.searchQuery) {
-                    this.$router.push({ name: 'home', query: { search: this.searchQuery, page } })
-                } else {
-                    this.$router.push({ name: 'home', query: { search: null, page } })
-                }
-
-                // this.$router.push({ name: 'home', query: { page } })
-                this.setIsLoadingList(true)
-                // this.$store.commit('clearPokemonsList')
-                this.setPage(+page)
-                this.loadPokemons(page)
+                this.loadPage(page)
             }
         },
 
         handleClickNextButton() {
-            const maxPage = this.calculateMaxPage
-            const page = this.page + 1
-
-            if (this.page < maxPage) {
-                this.setIsLoadingList(true)
-                this.setPage(page)
-                this.loadPokemons(page)
-                this.$router.push({ name: 'home', query: { page } })
+            if (this.page < this.getMaxPage) {
+                this.loadPage(this.page + 1)
             }
         },
 
         handleClickPrevButton() {
-            const page = this.page - 1
             if (this.page > 1) {
-                this.setIsLoadingList(true)
-                this.setPage(page)
-                this.loadPokemons(page)
-                this.$router.push({ name: 'home', query: { page } })
+                this.loadPage(this.page - 1)
             }
         },
 
         renderPagination(page) {
-            const maxPage = this.calculateMaxPage
+            const maxPage = this.getMaxPage
             let list = []
 
-            console.log(maxPage);
-
             if (maxPage <= 5) {
-                console.log('maxPage < 5');
                 for (let i = 1; i <= maxPage; i++) {
-                    console.log(i);
                     list.push(i)
                 }
-                console.log('list pagin', list);
+
                 return list
             }
 
@@ -105,14 +100,13 @@ export default {
             page: state => state.pagination.page,
         }),
 
-        calculateMaxPage() {
-            return Math.ceil(this.totalPokemons / this.limit)
-        }
+        ...mapGetters({
+            getMaxPage: 'pagination/getMaxPage',
+        }),
     },
 
     mounted() {
-        // console.log(this.$route.query.page);
-        // this.$store.dispatch('loadPokemons', this.$route.query.page)
+
     }
 }
 </script>

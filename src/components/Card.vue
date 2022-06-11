@@ -2,7 +2,7 @@
     <li class="main__item card" @click="$router.push(`/pokemon/${pokemon.name}`)">
         <div class="card__wrapper">
             <div class="card__image" :style="{ backgroundImage: `url(${pokemon.image})` }">
-                <p class="card__name">{{ pokemon.name }}</p>
+                <p class="card__name">{{ getName }}</p>
             </div>
             <div class="card__content">
                 <div class="card__description">
@@ -21,10 +21,18 @@
 </template>
 
 <script>
+
+import { formatName } from '@/utils/formatPokemonInfo'
 export default {
     name: 'card-pokemon',
     props: {
         pokemon: Object,
+    },
+
+    computed: {
+        getName() {
+            return formatName(this.pokemon.name)
+        }
     },
 }
 </script>

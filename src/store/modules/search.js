@@ -8,10 +8,17 @@ export default {
     state: {
         limitSearchList: 5, // Сколько результатов отображать в списке поиска
         searchQuery: '', // Значение поисковой строки
+        isShowSearchList: false,
         pokemonsNameList: [], // Все существующие имена
-        pokemonNameFilterList: [], // Отфильтрованные по поиску имена (??? Убрать?)
     },
     getters: {
+        getPokemonNameFilterList(state) {
+            return state.pokemonsNameList.filter(name => name.toLowerCase().startsWith(state.searchQuery.toLowerCase()))
+        },
+
+        getSeachList(state, getters) {
+            return getters.getPokemonNameFilterList.slice(0, state.limitSearchList)
+        }
     },
     mutations: {
         setSearchQuery(state, payload) {
@@ -32,18 +39,36 @@ export default {
         setPokemonNameFilterList(state, payload) {
             state.pokemonNameFilterList = payload
         },
+
+        setIsShowSearchList(state, payload) {
+            state.isShowSearchList = payload
+        }
     },
     actions: {
         async loadPokemonNameList({ state, commit }) {
+            const isEmptyPokemonsNameList = !state.pokemonsNameList.length
             try {
-                if (!state.pokemonsNameList.length) {
-                    const resolve = await api.fetchPokemons(1, state.totalPokemons)
+                // если списка имен нету
+                if (isEmptyPokemonsNameList) {
+                    const resolveTotal = await api.fetchPokemons()
+                    // получить имена {totalPokemons} штук
+                    const resolve = await api.fetchPokemons(1, resolveTotal.data.count)
+                    // сохранить имена
                     commit('setPokemonNameList', resolve.data.results)
-                    commit('loader/setIsLoadingNameList', false, { root: true })
+                    // commit('loader/setIsLoadingNameList', false, { root: true })
                 }
             } catch (err) {
                 console.log(err);
             }
-        }
+        },
+
+        // async loadTotalPokemons({ commit }) {
+        //     try {
+        //         const resolve = await api.fetchPokemons()
+        //         commit('pagination/setTotalPokemons', resolve.data.count, { root: true })
+        //     } catch (err) {
+        //         console.log(err);
+        //     }
+        // }
     },
 }

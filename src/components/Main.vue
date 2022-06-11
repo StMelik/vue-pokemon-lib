@@ -36,24 +36,27 @@ export default {
 
         ...mapActions({
             loadPokemonNameList: 'search/loadPokemonNameList',
+            // loadTotalPokemons: 'search/loadTotalPokemons',
             loadPokemons: 'pokemons/loadPokemons',
         }),
 
-        loadPage() {
-            const page = +this.$route.query.page
+        // checkQueryPageUrl(query) {
+        //     if (typeof query !== 'number') {
+        //         this.$router.push({ query: {} })
+        //     }
+        // },
+
+        async loadPage() {
+            const page = +this.$route.query.page || 1
             const search = this.$route.query.search
 
             if (search) {
-                this.loadPokemonNameList()
-                // this.$store.commit('setPokemonNameFilterList')
                 this.setSearchQuery(search)
+                await this.loadPokemonNameList()
             }
 
-            this.loadPokemons(page)
-
-            !Number.isNaN(page)
-                ? this.setPage(page)
-                : this.setPage(1)
+            await this.loadPokemons(page) // Отрисовать карточки по странице
+            this.setPage(page)
         }
     },
 

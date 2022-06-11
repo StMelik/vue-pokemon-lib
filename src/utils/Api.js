@@ -5,7 +5,7 @@ export default class Api {
         this.configApi = configApi
     }
 
-    fetchPokemons(page, limit) {
+    fetchPokemons(page = 1, limit = 0) {
         return axios.get('pokemon', {
             ...this.configApi,
             params: {
